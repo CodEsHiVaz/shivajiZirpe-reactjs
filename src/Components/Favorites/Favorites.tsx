@@ -1,16 +1,17 @@
 import React from "react";
 import { removeFromFavrites } from "../../Redux/features/ProductSlice";
 import { useAppDispatch, useAppSelector } from "../../Redux/hook";
-import { ProductObj } from "../Products/types/types";
+import { ProductObj } from "../../types/types";
 
 const Favorites = () => {
   const favProduct = useAppSelector((state) => state.product.favProduct);
+
   const dispatch = useAppDispatch();
 
   return (
     <div>
-      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 px-40 border pt-20 border-slate-900 gap-10">
-        {favProduct &&
+      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 px-40  pt-20  gap-10">
+        {favProduct ? (
           favProduct.map((elem: ProductObj) => {
             return (
               <div
@@ -37,7 +38,10 @@ const Favorites = () => {
                 </div>
               </div>
             );
-          })}
+          })
+        ) : (
+          <p className=" text-2xl "> no products added to fav</p>
+        )}
       </div>
     </div>
   );

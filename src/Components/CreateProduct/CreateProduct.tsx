@@ -5,7 +5,7 @@ import {
   showForm,
 } from "../../Redux/features/ProductSlice";
 import { useAppDispatch, useAppSelector } from "../../Redux/hook";
-import { CategotyObj, FormData } from "../Products/types/types";
+import { CategotyObj, FormData } from "../../types/types";
 
 const CreateProduct = () => {
   const categories = useAppSelector((state) => state.product.categories);

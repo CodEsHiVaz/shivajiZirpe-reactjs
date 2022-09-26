@@ -1,11 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import {
-  CategotyObj,
-  ProductArr,
-  ProductObj,
-} from "../../Components/Products/types/types";
+import { CategotyObj, ProductArr, ProductObj } from "../../types/types";
 // const authToken = process.env.TOKEN;
 const authToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vYmlvdGVjaDExQGdtYWlsLmNvbSIsImdpdGh1YiI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Db2RFc0hpVmF6IiwiaWF0IjoxNjY0MDAwOTc1LCJleHAiOjE2NjQ0MzI5NzV9.JDXjmRj4gxjsqZQTHzsiqY5LgD_KEyhdjxHLoY3Y1Ns";
@@ -14,6 +10,7 @@ export type InitialState = {
   productList: ProductObj[] | [];
   favProduct: ProductObj[] | [];
   categories: CategotyObj[] | [];
+  isLoading: boolean;
   toggleForm: boolean;
   indiviProd: ProductObj[] | [];
 };
@@ -22,6 +19,7 @@ const initialState: InitialState = {
   productList: [],
   favProduct: [],
   categories: [],
+  isLoading: false,
   toggleForm: false,
   indiviProd: [],
 };
@@ -143,23 +141,27 @@ export const productSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(
-      getProduct.pending,
-      (state, action: PayloadAction<any>) => {}
-    );
+    builder.addCase(getProduct.pending, (state, action: PayloadAction<any>) => {
+      state.isLoading = true;
+    });
     builder.addCase(
       getProduct.fulfilled,
       (state, action: PayloadAction<any>) => {
         state.productList = [...action.payload.products];
+        state.isLoading = false;
       }
     );
     builder.addCase(
       getProduct.rejected,
-      (state, action: PayloadAction<any>) => {}
+      (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+      }
     );
     builder.addCase(
       toggleCategory.pending,
-      (state, action: PayloadAction<any>) => {}
+      (state, action: PayloadAction<any>) => {
+        state.isLoading = true;
+      }
     );
     builder.addCase(
       toggleCategory.fulfilled,
@@ -174,53 +176,68 @@ export const productSlice = createSlice({
         } else {
           state.productList = [...arr];
         }
+        state.isLoading = false;
       }
     );
     builder.addCase(
       toggleCategory.rejected,
-      (state, action: PayloadAction<any>) => {}
+      (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+      }
     );
     builder.addCase(
       getCategory.pending,
-      (state, action: PayloadAction<any>) => {}
+      (state, action: PayloadAction<any>) => {
+        state.isLoading = true;
+      }
     );
     builder.addCase(
       getCategory.fulfilled,
       (state, action: PayloadAction<any>) => {
         state.categories = [...action.payload.categories];
+        state.isLoading = false;
       }
     );
     builder.addCase(
       getCategory.rejected,
-      (state, action: PayloadAction<any>) => {}
+      (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+      }
     );
-    builder.addCase(
-      addProduct.pending,
-      (state, action: PayloadAction<any>) => {}
-    );
+    builder.addCase(addProduct.pending, (state, action: PayloadAction<any>) => {
+      state.isLoading = true;
+    });
     builder.addCase(
       addProduct.fulfilled,
       (state, action: PayloadAction<any>) => {
         state.productList = [...state.productList, action.payload.product];
+        state.isLoading = false;
       }
     );
     builder.addCase(
       addProduct.rejected,
-      (state, action: PayloadAction<any>) => {}
+      (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+      }
     );
     builder.addCase(
       getIndiProduct.pending,
-      (state, action: PayloadAction<any>) => {}
+      (state, action: PayloadAction<any>) => {
+        state.isLoading = true;
+      }
     );
     builder.addCase(
       getIndiProduct.fulfilled,
       (state, action: PayloadAction<any>) => {
         state.indiviProd = [action.payload.product];
+        state.isLoading = false;
       }
     );
     builder.addCase(
       getIndiProduct.rejected,
-      (state, action: PayloadAction<any>) => {}
+      (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+      }
     );
   },
 });
